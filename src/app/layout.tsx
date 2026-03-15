@@ -16,6 +16,15 @@ const exo = Exo({
     weight: ["400", "500", "600", "700", "800", "900"],
 });
 
+interface CartState {
+        cartId: string | null;
+        numOfCartItems: number;
+        totalCartPrice: number;
+        products: any[];
+        error: string | null;
+        isLoading: boolean;
+    }
+
 let cartState: CartState = {
     cartId: null,
     numOfCartItems: 0,
