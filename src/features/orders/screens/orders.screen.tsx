@@ -8,24 +8,20 @@ import { useAppSelector } from "@/store/store/store";
 import { useEffect, useState } from "react";
 import { OrdersResponse } from "../types/orders.types";
 
-export default  function OrdersScreen() {
-
+export default function OrdersScreen() {
     const { userInfo } = useAppSelector((state) => state.auth);
     const [orders, setOrders] = useState<null | OrdersResponse>(null);
 
-    if (!userInfo) {
-        return;
-    }
-
     useEffect(() => {
+        if (!userInfo?.id) return;
+
         const fetchOrders = async () => {
-            const response = await getUserOrders({ id: userInfo.id });
-            setOrders(response)
+            const response = await getUserOrders({ id: userInfo.id as string });
+            setOrders(response);
         };
 
         fetchOrders();
-    }, []);
-
+    }, [userInfo?.id]);
 
     if (!orders || orders.length === 0) {
         return (
@@ -50,12 +46,9 @@ export default  function OrdersScreen() {
         );
     }
 
-
     return (
         <div className="container mx-auto px-4 py-8">
-            {/* Header */}
             <div className="mb-8">
-                {/* Breadcrumb */}
                 <nav className="flex items-center gap-2 text-sm text-gray-500 mb-6">
                     <Link href="/" className="hover:text-primary-600 transition">
                         Home
@@ -64,7 +57,6 @@ export default  function OrdersScreen() {
                     <span className="text-gray-900 font-medium">My Orders</span>
                 </nav>
 
-                {/* Title Section */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div className="flex items-center gap-4">
                         <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-primary-500 to-primary-600 flex items-center justify-center">
@@ -91,7 +83,6 @@ export default  function OrdersScreen() {
                 </div>
             </div>
 
-            {/* Orders List */}
             <div className="space-y-4">
                 {orders.map((order) => (
                     <OrderCard key={order._id} orderInfo={order} />
